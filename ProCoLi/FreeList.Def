@@ -1,0 +1,48 @@
+DEFINITION MODULE FreeList;   (* ProCoLi 01/89 *)
+
+(*  Freispeicherliste
+ *
+ *  Dieses Modul enthält die Liste unbenutzter Paare mit entsprechenden
+ *  Operationen.
+ *
+ *  Die Anforderung eines Paars bei leerer Freispeicherliste führt zum Garbage
+ *  Collection, wobei eine neue Liste aufgebaut wird.
+ *)
+
+
+  FROM SExprs IMPORT
+    (* TYPE      *) SExpr;
+
+  PROCEDURE NewPair (VAR PairPtr : SExpr);
+
+  (*  Mit 'NewPair (PairPtr)' wird ein Paar aus der Freispeicherliste entfernt
+   *  und ein Zeiger darauf in 'PairPtr' geliefert.
+   *  Dabei kann ein Speicherüberlauf auftreten, der in 'Registers.OutOfMem'
+   *  angezeigt wird!
+   *)
+
+
+  PROCEDURE FreePair (PairPtr : SExpr);
+
+  (*  Mit 'FreePair (PairPtr)' wird das Paar, auf das der durch 'PairPtr'
+   *  bezeichnete Zeiger weist, in die Freispeicherliste eingefügt.
+   *)
+
+
+  PROCEDURE InitFreeList (VAR Len : CARDINAL);
+
+  (*  Mit 'InitFreeList (Len)' werden alle Paare zu einer Freispeicherliste
+   *  zusammengefaßt, deren Länge in 'Len' geliefert wird.
+   *)
+
+
+  PROCEDURE BuildFreeList (VAR Len : CARDINAL);
+
+  (*  Mit 'BuildFreeList (Len)' werden alle Paare, die nicht markiert sind
+   *  ("Müll"), zu einer neuen Freispeicherliste zusammengefaßt, deren Länge in
+   *  'Len' geliefert wird. Bei allen markierten ("aktiven") Paaren wird die
+   *  Markierung gelöscht.
+   *)
+
+
+END FreeList.

@@ -1,0 +1,71 @@
+DEFINITION MODULE SExprIO;   (* ProCoLi 02/89 *)
+
+(*  Ein-/Ausgabe von S-Ausdrücken
+ *
+ *  Dieses Modul enthält die Operationen für die Realisierung der Ein-/Ausgabe-
+ *  LISP-Funktionen, sowie für das Einlesen von Funktionsanwendungen und das
+ *  Ausgeben von Werten im Interpreter.
+ *
+ *  Neben der Punkt- und der Listen-Notation für S-Ausdrücke sind auch die
+ *  gemischte Darstellung und eine "Pseudo-Notation" (für "Listen", die nicht
+ *  mit NIL enden) zulässig. Die Syntax der S-Ausdrücke ist nachfolgend in EBNF
+ *  angegeben:
+ *     S-Expression = Identifier | Number |
+ *                    "(" {S-Expression} [S-Expression "." S-Expression] ")".
+ *     Identifier   = Letter {Letter | Digit | "_"}.
+ *     Number       = ["+" | "-"] Digit {Digit}.
+ *     Letter       = "A" | ... | "Z".
+ *     Digit        = "0" | ... | "9".
+ *  Innerhalb von Namen (Identifier) und Zahlen (Number) dürfen keine Leer-
+ *  zeichen und Zeilenwechsel vorkommen, da diese zur Trennung von Symbolen
+ *  verwendet werden. Kommentare sind Zeilen, die mit dem Zeichen "+" beginnen.
+ *)
+
+
+
+  PROCEDURE WriteSExpr;
+
+  (*  Mit 'WriteSExpr' wird der S-Ausdruck im Register 'Registers.Val' auf den
+   *  Bildschirm geschrieben.
+   *  Dabei kann kein Speicherüberlauf auftreten!
+   *  Für die leere Liste wird der Name "NIL" ausgegeben; ein Interpreter-Code
+   *  wird als Zahl in eckigen Klammern geschrieben; bei S-Ausdrücken, die keine
+   *  Atome sind, wird die Listen- oder die "Pseudo-Notation" verwendet; die
+   *  (endlose) Ausgabe zyklischer Strukturen wird vermieden und durch die
+   *  Zeichenfolge "..." angedeutet.
+   *)
+
+
+  PROCEDURE ReadSExpr;
+
+  (*  Mit 'ReadSExpr' wird von der Tastatur ein S-Ausdruck gelesen und im
+   *  Register 'Registers.Val' geliefert.
+   *  Eine fehlerhafte Eingabe oder ein Speicherüberlauf wird gemeldet und in
+   *  'Errors.Abort' angezeigt.
+   *  Eingegebene Kleinbuchstaben werden durch die entsprechenden Großbuchstaben
+   *  ersetzt.
+   *)
+
+
+  PROCEDURE NewLine;
+
+  (*  Mit 'NewLine' wird ein Zeilen-Vorschub in der Standard-Ausgabe
+   *  erzeugt.
+   *)
+
+
+  PROCEDURE Spaces (x : INTEGER);
+
+  (*  Mit 'Spaces' wird 'x' Leerzeichen in die Standard-Ausgabe
+   *  geschrieben.
+   *)
+
+
+  PROCEDURE Skip;
+
+  (*  Mit 'Skip' wird im Fehlerfall der Rest der aktuellen Eingabezeile
+   *  überlesen.
+   *)
+
+
+END SExprIO.

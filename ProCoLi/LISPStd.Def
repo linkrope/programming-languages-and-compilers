@@ -1,0 +1,123 @@
+DEFINITION MODULE LISPStd;   (* ProCoLi 02/89 *)
+
+(*  Standard-LISP-Funktionen und -Prädikate
+ *
+ *  Dieses Modul enthält die Standard-LISP-Funktionen des Interpreters.
+ *)
+
+
+
+  PROCEDURE ConsSubr;
+
+  (*  Mit 'ConsSubr' wird im Register 'Registers.Val' ein S-Ausdruck geliefert,
+   *  dessen Linksteil der erste S-Ausdruck und dessen Rechtsteil der zweite
+   *  S-Ausdruck der Liste 'Registers.Args' ist.
+   *)
+
+
+  PROCEDURE CARSubr;
+
+  (*  Mit 'CARSubr' wird im Register 'Registers.Val' der Linksteil des nicht-
+   *  atomaren S-Ausdrucks in der Liste 'Registers.Args' geliefert.
+   *)
+
+
+  PROCEDURE CDRSubr;
+
+  (*  Mit 'CDRSubr' wird im Register 'Registers.Val' der Rechtsteil des nicht-
+   *  atomaren S-Ausdrucks in der Liste 'Registers.Args' geliefert.
+   *)
+
+
+  PROCEDURE AtomSubr;
+
+  (*  Mit 'AtomSubr' wird überprüft, ob der S-Ausdruck in der Liste
+   *  'Registers.Args' ein Atom ist. Im Register 'Registers.Val' wird der
+   *  entsprechende Wahrheitswert geliefert.
+   *)
+
+
+  PROCEDURE EqSubr;
+
+  (*  Mit 'EqSubr' wird überprüft, ob die beiden S-Ausdrücke in der Liste
+   *  'Registers.Args' identisch sind. Im Register 'Registers.Val' wird der
+   *  entsprechende Wahrheitswert geliefert.
+   *)
+
+
+  PROCEDURE NotSubr;
+
+  (*  Mit 'NotSubr' wird überprüft, ob der S-Ausdruck in der Liste
+   *  'Registers.Args' der ausgezeichnete S-Ausdruck 'SExprs.Nil' ist. Im
+   *  Register 'Registers.Val' wird der entsprechende Wahrheitswert geliefert.
+   *)
+
+
+  PROCEDURE NumberPSubr;
+
+  (*  Mit 'NumberPSubr' wird überprüft, ob der S-Ausdruck in der Liste
+   *  'Registers.Args' eine ganze Zahl (und kein Interpreter-Code) ist. Im
+   *  Register 'Registers.Val' wird der entsprechende Wahrheitswert geliefert.
+   *)
+
+
+  PROCEDURE RPlacASubr;
+
+  (*  Mit 'RPlacASubr' wird der Linksteil des nichtatomaren ersten S-Ausdrucks
+   *  durch den zweiten S-Ausdruck der Liste 'Registers.Args' ersetzt. Der so
+   *  veränderte erste S-Ausdruck wird im Register 'Registers.Val' geliefert.
+   *)
+
+
+  PROCEDURE RPlacDSubr;
+
+  (*  Mit 'RPlacDSubr' wird der Rechtsteil des nichtatomaren ersten S-Ausdrucks
+   *  durch den zweiten S-Ausdruck der Liste 'Registers.Args' ersetzt. Der so
+   *  veränderte erste S-Ausdruck wird im Register 'Registers.Val' geliefert.
+   *)
+
+
+  PROCEDURE DefineSubr;
+
+  (*  Mit 'DefineSubr' wird für einen Namen ein Eintrag mit dem Indikator EXPR
+   *  und einer Eigenschaft erzeugt. Der Name wird im Register
+   *  'Registers.Val' geliefert.
+   *  Der Name ist der erste S-Ausdruck der Liste 'Registers.Args' und die
+   *  Eigenschaft ist der zweite S-Ausdruck.
+   *)
+
+
+  PROCEDURE GetSubr;
+
+  (*  Mit 'GetSubr' wird für einen Namen ein Eintrag mit einem Indikator
+   *  gesucht und die Eigenschaft im Register 'Registers.Val' geliefert.
+   *  Der Name ist der erste S-Ausdruck der Liste 'Registers.Args', und der
+   *  Indikator ist der zweite S-Ausdruck.
+   *  Existiert kein solcher Eintrag, so wird der ausgezeichnete S-Ausdruck
+   *  'SExpr.Nil' geliefert.
+   *)
+
+
+  PROCEDURE PutPropSubr;
+
+  (*  Mit 'PutPropSubr' wird für einen Namen ein Eintrag mit einem Indikator und
+   *  einer Eigenschaft erzeugt. Die Eigenschaft wird im Register
+   *  'Registers.Val' geliefert.
+   *  Der Name ist der erste S-Ausdruck der Liste 'Registers.Args', der
+   *  Indikator ist der zweite S-Ausdruck, und die Eigenschaft ist der dritte
+   *  S-Ausdruck.
+   *)
+
+
+  PROCEDURE RemPropSubr;
+
+  (*  Mit 'RemPropSubr' wird für einen Namen ein Eintrag mit einem Indikator
+   *  gelöscht.
+   *  Der Name ist der erste S-Ausdruck der Liste 'Registers.Args', und der
+   *  Indikator ist der zweite S-Ausdruck.
+   *  Im Register 'Registers.Val' wird immer der ausgezeichnete S-Ausdruck
+   *  'SExpr.Nil' geliefert.
+   *)
+
+
+END LISPStd.

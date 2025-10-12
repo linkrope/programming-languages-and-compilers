@@ -1,0 +1,74 @@
+DEFINITION MODULE LISPBase;   (* ProCoLi 02/89 *)
+
+(*  Vordefinierte LISP-Namen
+ *
+ *  Dieses Modul enthält die Prozedur zur Initialisierung der Property-Listen
+ *  von vordefinierten LISP-Namen, die Codierung der speziellen Formen und der
+ *  vordefinierten Funktionen, sowie die im Interpreter benötigten Property-
+ *  Listen.
+ *
+ *  Die Doppelrolle der Konstanten mit dem Namen NIL, die einerseits das Listen-
+ *  ende angibt und andererseits als Name Eigenschaften erhalten kann, spiegelt
+ *  sich in ihrer zweifachen Definition als ausgezeichneter S-Ausdruck
+ *  'SExprs.Nil' und als Property-Liste 'NilPList' wider. In S-Ausdrücken wird
+ *  NIL einheitlich durch 'SExprs.Nil' dargestellt. Die Eigenschaften von NIL
+ *  sind in der Property-Liste 'NilPList' eingetragen.
+ *  Einträge in Property-Listen mit den Indikatoren SYS, VAR, SUBR und FSUBR
+ *  sollten nicht in seriösen LISP-Programmen modifiziert werden, da sonst
+ *  unvorhersehbare Fehler zu erwarten sind!
+ *)
+
+
+  FROM SExprs IMPORT
+    (* TYPE      *) SExpr;
+
+  TYPE
+    FunRef   = (QUOTEREF, LISTREF, CONDREF,
+                ANDREF, ORREF,
+                PLUSREF, TIMESREF, MAXREF, MINREF,
+
+                CONSREF, CARREF, CDRREF, ATOMREF, EQREF,
+                NOTREF, NUMBERPREF, RPLACAREF, RPLACDREF,
+                DEFINEREF, GETREF, PUTPROPREF, REMPROPREF,
+                DIFFERENCEREF, QUOTIENTREF, REMAINDERREF, DIVIDEREF,
+                ADD1REF, SUB1REF, MINUSREF, EXPTREF,
+                ZEROPREF, ONEPREF, MINUSPREF, GREATERPREF, LESSPREF,
+                PRINTREF, READREF, NEWLINEREF, SPACESREF,
+                EXITREF);
+
+    FSubrRef = [QUOTEREF .. MINREF];         (* Spezielle Formen          *)
+    SubrRef  = [CONSREF .. EXITREF];         (* Vordefinierte Funktionen  *)
+
+  VAR
+    NilPList, TPList,                                 (* Konstanten   *)
+
+    ApValPList, VarPList,                             (* Indikatoren  *)
+    ExprPList, SubrPList, FSubrPList,
+
+    LambdaPList, LabelPList          : SExpr;         (* Operatoren   *)
+
+
+  PROCEDURE Bool (b : BOOLEAN) : SExpr;
+
+  (*  Das Resultat von 'Bool (b)' ist ein S-Ausdruck, der den Wahrheitswert 'b'
+   *  darstellt.
+   *)
+
+
+  PROCEDURE InitBase;
+
+  (*  Mit 'InitBase' werden die Property-Listen der vordefinierten LISP-Namen
+   *  erzeugt und in die Symboltabelle eingefügt. Der Wert einer Konstanten wird
+   *  als einzige Komponente einer Liste mit dem Indikator APVAL in ihre
+   *  Property-Liste eingetragen. Bei speziellen Formen oder Funktionen wird mit
+   *  dem Indikator FSUBR bzw. SUBR der Interpreter-Code eingetragen, dessen
+   *  Wert die entsprechende Ordnungszahl bzgl. des Aufzählungstyps 'FunRef'
+   *  angibt.
+   *  Die als Variablen exportierten Property-Listen erhalten einen Dummy-
+   *  Eintrag mit dem Indikator SYS, damit sie beim Garbage Collection nicht
+   *  verloren gehen.
+   *  Ein Speicherüberlauf führt zum Abbruch des Programms!
+   *)
+
+
+END LISPBase.

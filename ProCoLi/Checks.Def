@@ -1,0 +1,111 @@
+DEFINITION MODULE Checks;   (* ProCoLi 06/92 *)
+
+(*  Klassifizierung von S-Ausdrücken / Überprüfung von Argumentlisten
+ *
+ *  Dieses Modul enthält Prädikate zur Klassifizierung von S-Ausdrücken und
+ *  Prozeduren zur Überprüfung und Zerlegung der Argumentlisten von LISP-
+ *  Funktionen.
+ *)
+
+
+  FROM SExprs IMPORT
+    (* TYPE      *) SExpr;
+
+  FROM Errors IMPORT
+    (* TYPE      *) ErrPos;
+
+
+  PROCEDURE isAtom (sx : SExpr) : BOOLEAN;
+
+  (*  Das Prädikat 'isAtom (sx)' ist wahr, gdw. 'sx' ein Atom ist (d.h. eine
+   *  ganze Zahl, eine Property-Liste oder der ausgezeichnete S-Ausdruck
+   *  'SExpr.Nil').
+   *)
+
+
+  PROCEDURE isInt (sx : SExpr) : BOOLEAN;
+
+  (*  Das Prädikat 'isInt (sx)' ist wahr, gdw. 'sx' eine ganze Zahl ohne
+   *  Kennzeichnung ist (d.h. kein Interpreter-Code).
+   *)
+
+
+  PROCEDURE isCode (sx : SExpr) : BOOLEAN;
+
+  (*  Das Prädikat 'isCode (sx)' ist wahr, gdw. 'sx' eine ganze Zahl mit
+   *  Kennzeichnung ist (d.h. ein Interpreter-Code).
+   *)
+
+
+  PROCEDURE isPList (sx : SExpr) : BOOLEAN;
+
+  (*  Das Prädikat 'isPList (sx)' ist wahr, gdw. 'sx' eine Property-Liste ist.
+   *)
+
+
+  PROCEDURE isInd (sx : SExpr) : BOOLEAN;
+
+  (*  Das Prädikat 'isInd (sx)' ist wahr, gdw. 'sx' ein Indikator ist (d.h. eine
+   *  ganze Zahl ohne Kennzeichnung oder eine Property-Liste).
+   *)
+
+
+  PROCEDURE Check0Args (Pos : ErrPos; ArgList : SExpr);
+
+  (*  Mit 'Check0Args (Pos, ArgList)' wird überprüft, ob 'ArgList' eine leere
+   *  Liste ist.
+   *  Im Fehlerfall wird eine Meldung mit dem Fehlerort 'Pos' ausgegeben.
+   *)
+
+
+  PROCEDURE Check1Arg (Pos : ErrPos; ArgList : SExpr;
+                       VAR Arg : SExpr);
+
+  (*  Mit 'Check1Arg (Pos, ArgList, Arg)' wird überprüft, ob 'ArgList' eine
+   *  Liste mit nur einer Komponente ist. Diese Komponente wird in 'Arg'
+   *  geliefert.
+   *  Im Fehlerfall wird eine Meldung mit dem Fehlerort 'Pos' ausgegeben.
+   *)
+
+
+  PROCEDURE Check2Args (Pos : ErrPos; ArgList : SExpr;
+                        VAR Arg1, Arg2 : SExpr);
+
+  (*  Mit 'Check2Args (Pos, ArgList, Arg1, Arg2)' wird überprüft, ob 'ArgList'
+   *  eine Liste mit zwei Komponenten ist. Die Komponenten werden in 'Arg1' und
+   *  'Arg2' geliefert.
+   *  Im Fehlerfall wird eine Meldung mit dem Fehlerort 'Pos' ausgegeben.
+   *)
+
+
+  PROCEDURE Check3Args (Pos : ErrPos; ArgList : SExpr;
+                        VAR Arg1, Arg2, Arg3 : SExpr);
+
+  (*  Mit 'Check3Args (Pos, ArgList, Arg1, Arg2, Arg3)' wird überprüft, ob
+   *  'ArgList' eine Liste mit drei Komponenten ist. Die Komponenten werden in
+   *  'Arg1', 'Arg2' und 'Arg3' geliefert.
+   *  Im Fehlerfall wird eine Meldung mit dem Fehlerort 'Pos' ausgegeben.
+   *)
+
+
+  PROCEDURE Check1Int (Pos : ErrPos; ArgList : SExpr;
+                       VAR Int : INTEGER);
+
+  (*  Mit 'Check1Int (Pos, ArgList, Int)' wird überprüft, ob 'ArgList' eine
+   *  Liste der Länge eins ist, die eine ganze Zahl ohne Kennzeichnung enthält.
+   *  Diese Zahl wird in 'Int' geliefert.
+   *  Im Fehlerfall wird eine Meldung mit dem Fehlerort 'Pos' ausgegeben.
+   *)
+
+
+  PROCEDURE Check2Ints (Pos : ErrPos; ArgList : SExpr;
+                        VAR Int1, Int2 : INTEGER);
+
+  (*  Mit 'Check2Ints (Pos, ArgList, Int1, Int2)' wird überprüft, ob 'ArgList'
+   *  eine Liste der Länge zwei ist, die ganze Zahlen ohne Kennzeichnung
+   *  enthält. Die beiden Zahlen werden in 'Int1' und 'Int2' geliefert.
+   *  Im Fehlerfall wird eine Meldung mit dem Fehlerort 'Pos' ausgegeben.
+   *)
+
+
+END Checks.

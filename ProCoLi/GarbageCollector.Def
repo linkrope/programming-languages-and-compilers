@@ -1,0 +1,34 @@
+DEFINITION MODULE GarbageCollector;   (* ProCoLi 01/89 *)
+
+(*  Speicherwiedergewinnung
+ *
+ *  Dieses Modul enthält die Prozeduren des MARK & SWEEP Garbage Collectors.
+ *
+ *  Zuerst werden alle "aktiven" (noch benötigten) Paare markiert; anschließend
+ *  werden die nicht markierten Paare als "Müll" eingesammelt und stehen dem
+ *  Interpreter wieder zur Verfügung. Parallel dazu müssen die zur Verwaltung
+ *  von Namen verwendeten Strukturen (Symbol- und Repräsentationstabelle)
+ *  konsistent und kompakt gehalten werden.
+ *)
+
+
+  FROM SExprs IMPORT
+    (* TYPE      *) SExpr;
+
+  PROCEDURE CollectPairs;
+
+  (*  Mit 'CollectPairs' wird der Garbage Collector aufgerufen. Wenn nicht
+   *  genügend viele Paare wiederbeschafft werden können, so wird ein Speicher-
+   *  überlauf in 'Registers.OutOfMem' angezeigt!
+   *)
+
+
+  PROCEDURE CollectChars;
+
+  (*  Mit 'CollectChars' wird der Garbage Collector aufgerufen. Wenn nicht
+   *  genügend viele Zeichen wiederbeschafft werden können, so wird ein
+   *  Speicherüberlauf in 'Registers.OutOfMem' angezeigt!
+   *)
+
+
+END GarbageCollector.

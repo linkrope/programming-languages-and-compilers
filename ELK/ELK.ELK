@@ -1,0 +1,24 @@
+"(", ")", "{", "}", "[", "]", "=", "#", "<", "<=", ">", ">=",
+"&", "~", "^", "+", "-", "*", "/", "|", ",", ";", ":", ":=", ".", "..",
+integer, real, long, char, string, ident,
+
+ARRAY, BEGIN, BY, CASE, CONST, DIV, DO, ELSE, ELSIF, END, EXIT, FOR,
+IF, IMPORT, IN, IS, LOOP, MOD, MODULE, NIL, OF, OR, POINTER, PROCEDURE,
+RECORD, REPEAT, RETURN, THEN, TO, TYPE, UNTIL, VAR, WHILE, WITH;
+
+Definition, Expression, Term, Nont, reserved.
+
+Grammar = Term {"," Term} [";" Nont {"," Nont}] "." Definition {Definition}.
+Definition = Nont "=" Expression ".".
+Expression =
+  {(Term | Nont)}
+  {("(" Expression {"|" Expression} ")" |
+  "[" Expression "]" | "{" Expression "}")
+  {(Term | Nont)}}.
+Term = (ident | reserved | string).
+Nont = ident.
+reserved =
+  (ARRAY | BEGIN | BY | CASE | CONST | DIV | DO | ELSE | ELSIF | END | EXIT |
+  FOR | IF | IMPORT | IN | IS | LOOP | MOD | MODULE | NIL | OF | OR | POINTER |
+  PROCEDURE | RECORD | REPEAT | RETURN | THEN | TO | TYPE | UNTIL | VAR |
+  WHILE | WITH).

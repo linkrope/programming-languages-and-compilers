@@ -1,0 +1,63 @@
+MODULE Parser;  (* ELK *)
+
+  IMPORT Files, Texts, Viewers, Oberon, TextFrames, Scanner
+%
+  VAR W : Texts.Writer;
+    Tok : INTEGER;
+    Dir : ARRAY (200 - 1) DIV (MAX(SET) + 1) + 1 OF ARRAY 128 OF SET;
+%
+  PROCEDURE Load(Name : ARRAY OF CHAR);
+
+    VAR f : Files.File; r : Files.Rider;
+      i, j, m, n : INTEGER;
+
+  BEGIN f := Files.Old(Name);
+    IF f # NIL THEN Files.Set(r, f, 0);
+      Files.ReadBytes(r, m, SIZE(INTEGER)); Files.ReadBytes(r, n, SIZE(INTEGER));
+      FOR i := 0 TO m - 1 DO
+        Files.ReadBytes(r, Dir[i], n * SIZE(SET));
+        FOR j := n TO LEN(Dir[i]) - 1 DO Dir[i][j] := {} END
+      END
+    ELSE
+      Texts.WriteString(W, "Load error: ");
+      Texts.WriteString(W, Name); Texts.WriteString(W, " not found"); Texts.WriteLn(W);
+      Texts.Append(Oberon.Log, W.buf); HALT(99)
+    END
+  END Load;
+%
+  PROCEDURE Parse*;
+
+    VAR S : Texts.Scanner; T : Texts.Text; V : Viewers.Viewer;
+      Beg, End, Time : LONGINT;
+
+    PROCEDURE Process(Source : Texts.Text; Pos : LONGINT);
+
+    BEGIN Scanner.Init(Source, Pos);
+      Texts.Write(W, 09X); Texts.WriteString(W, "parsing "); Texts.Append(Oberon.Log, W.buf);
+      Scanner.Get(Tok); $;
+      Texts.WriteLn(W); Texts.Append(Oberon.Log, W.buf)
+    END Process;
+
+  BEGIN Texts.OpenScanner(S, Oberon.Par.text, Oberon.Par.pos); Texts.Scan(S);
+    IF S.class = Texts.Char THEN
+      IF S.c = "*" THEN V := Oberon.MarkedViewer();
+        IF (V.dsc # NIL) & (V.dsc.next IS TextFrames.Frame) THEN
+          Process(V.dsc.next(TextFrames.Frame).text, 0)
+        END
+      ELSIF S.c = "@" THEN Oberon.GetSelection(T, Beg, End, Time);
+        IF Time >= 0 THEN Process(T, Beg) END
+      ELSIF S.c = "^" THEN Oberon.GetSelection(T, Beg, End, Time);
+        IF Time >= 0 THEN Texts.OpenScanner(S, T, Beg); Texts.Scan(S) END
+      END
+    END;
+    IF S.class = Texts.Name THEN NEW(T); Texts.Open(T, S.s);
+      IF T.len # 0 THEN Process(T, 0)
+      ELSE Texts.WriteString(W, S.s); Texts.WriteString(W, " not found");
+        Texts.WriteLn(W); Texts.Append(Oberon.Log, W.buf)
+      END
+    END
+  END Parse;
+%
+BEGIN Texts.OpenWriter(W); Load("Parser.Tab");
+  Texts.WriteString(W, "Parser / ELK"); Texts.WriteLn(W); Texts.Append(Oberon.Log, W.buf)
+END Parser.Parse *

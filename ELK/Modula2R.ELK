@@ -1,0 +1,111 @@
+"(", ")", "{", "}", "[", "]", "=", "#", "<", "<=", "<>", ">", ">=",
+"&", "~", "^", "+", "-", "*", "/", "|", ",", ";", ":", ":=", ".", "..",
+integer, real, char, string, ident,
+
+AND, ARRAY, BEGIN, BY, CASE, CONST, DEFINITION, DIV, DO, ELSE, ELSIF, END,
+EXIT, EXPORT, FOR, FROM, IF, IMPLEMENTATION, IMPORT, IN, LOOP, MOD, MODULE,
+NOT, OF, OR, POINTER, PROCEDURE, QUALIFIED, RECORD, REPEAT, RETURN, SET,
+THEN, TO, TYPE, UNTIL, VAR, WHILE, WITH;
+
+ConstExpression, relation, SimpleConstExpr, AddOperator, ConstTerm, MulOperator,
+ConstFactor, set, element, type, SimpleType, enumeration, IdentList,
+SubrangeType, ArrayType, RecordType, FieldListSequence, FieldList, variant,
+CaseLabelList, CaseLabels, SetType, PointerType, ProcedureType, FormalTypeList,
+ExpList, expression, SimpleExpression, term, factor,
+ActualParameters, assignment, ProcedureCall, IfStatement, CaseStatement, case,
+WhileStatement, RepeatStatement, ForStatement, LoopStatement, WithStatement,
+ProcedureHeading, block, declaration, FormalParameters, FPSection, FormalType,
+ModuleDeclaration, priority, export, import, definition, CompilationUnit.
+
+Modula2R = CompilationUnit.
+number = (integer | real | char).
+qualident = ident {"." ident}.
+ConstantDeclaration = ident "=" ConstExpression.
+ConstExpression = SimpleConstExpr [relation SimpleConstExpr].
+relation = ("=" | "#" | "<>" | "<" | "<=" | ">" | ">=" | IN).
+SimpleConstExpr = [("+" | "-")] ConstTerm {AddOperator ConstTerm}.
+AddOperator = ("+" | "-" | OR).
+ConstTerm = ConstFactor {MulOperator ConstFactor}.
+MulOperator = ("*" | "/" | DIV | MOD | AND | "&").
+ConstFactor =
+  (qualident | number | string | set |
+  "(" ConstExpression ")" | (NOT | "~") ConstFactor).
+set = [qualident] "{" [element {"," element}] "}".
+element = ConstExpression [".." ConstExpression].
+TypeDeclaration = ident "=" type.
+type =
+  (SimpleType | ArrayType | RecordType | SetType | PointerType | ProcedureType).
+SimpleType = (qualident | enumeration | SubrangeType).
+enumeration = "(" IdentList ")".
+IdentList = ident {"," ident}.
+SubrangeType = "[" ConstExpression ".." ConstExpression "]".
+ArrayType = ARRAY SimpleType {"," SimpleType} OF type.
+RecordType = RECORD FieldListSequence END.
+FieldListSequence = FieldList {";" FieldList}.
+FieldList =
+  [(IdentList ":" type |
+  CASE [ident ":"] qualident OF variant {"|" variant}
+  [ELSE FieldListSequence] END)].
+variant = CaseLabelList ":" FieldListSequence.
+CaseLabelList = CaseLabels {"," CaseLabels}.
+CaseLabels = ConstExpression [".." ConstExpression].
+SetType = SET OF SimpleType.
+PointerType = POINTER TO type.
+ProcedureType = PROCEDURE [FormalTypeList].
+FormalTypeList =
+  "(" [[VAR] FormalType {"," [VAR] FormalType}] ")" [":" qualident].
+VariableDeclaration = IdentList ":" type.
+designator = qualident {("." ident | "[" ExpList "]" | "^")}.
+ExpList = expression {"," expression}.
+expression = SimpleExpression [relation SimpleExpression].
+SimpleExpression = [("+" | "-")] term {AddOperator term}.
+term = factor {MulOperator factor}.
+factor =
+  (number | string | set | designator [ActualParameters] |
+  "(" expression ")" | (NOT | "~") factor).
+ActualParameters = "(" [ExpList] ")".
+statement =
+  [(assignment | ProcedureCall | IfStatement | CaseStatement |
+  WhileStatement | RepeatStatement | LoopStatement | ForStatement |
+  WithStatement | EXIT | RETURN [expression])].
+assignment = designator ":=" expression.
+ProcedureCall = designator [ActualParameters].
+StatementSequence = statement {";" statement}.
+IfStatement =
+  IF expression THEN StatementSequence
+  {ELSIF expression THEN StatementSequence}
+  [ELSE StatementSequence] END.
+CaseStatement = CASE expression OF case {"|" case} [ELSE StatementSequence] END.
+case = CaseLabelList ":" StatementSequence.
+WhileStatement = WHILE expression DO StatementSequence END.
+RepeatStatement = REPEAT StatementSequence UNTIL expression.
+ForStatement =
+  FOR ident ":=" expression TO expression [BY ConstExpression] DO
+  StatementSequence END.
+LoopStatement = LOOP StatementSequence END.
+WithStatement = WITH designator DO StatementSequence END.
+ProcedureDeclaration = ProcedureHeading ";" block ident.
+ProcedureHeading = PROCEDURE ident [FormalParameters].
+block = {declaration} [BEGIN StatementSequence] END.
+declaration =
+  (CONST {ConstantDeclaration ";"} |
+  TYPE {TypeDeclaration ";"} |
+  VAR {VariableDeclaration ";"} |
+  ProcedureDeclaration ";" |
+  ModuleDeclaration ";").
+FormalParameters = "(" [FPSection {";" FPSection}] ")" [":" qualident].
+FPSection = [VAR] IdentList ":" FormalType.
+FormalType = [ARRAY OF] qualident.
+ModuleDeclaration = MODULE ident [priority] ";" {import} [export] block ident.
+priority = "[" ConstExpression "]".
+export = EXPORT [QUALIFIED] IdentList ";".
+import = [FROM ident] IMPORT IdentList ";".
+DefinitionModule =
+  DEFINITION MODULE ident ";" {import} [export] {definition} END ident ".".
+definition =
+  (CONST {ConstantDeclaration ";"} |
+  TYPE {ident ["=" type] ";"} |
+  VAR {VariableDeclaration ";"} |
+  ProcedureHeading ";").
+ProgramModule = MODULE ident [priority] ";" {import} block ident ".".
+CompilationUnit = (DefinitionModule | [IMPLEMENTATION] ProgramModule).

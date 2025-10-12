@@ -1,0 +1,61 @@
+DEFINITION MODULE ObList;   (* ProCoLi 01/89 *)
+
+(*  Symboltabelle
+ *
+ *  Dieses Modul enthält eine Tabelle aller Property-Listen. Diese wird bei der
+ *  Eingabe von S-Ausdrücken für die Bestimmung der zu einer Zeichenfolge
+ *  gehörenden Property-Liste benötigt. Beim Garbage Collection wird sequentiell
+ *  auf die Property-Listen zugegriffen, um alle Paare, die zu nichtleeren
+ *  Property-Listen gehören, zu markieren.
+ *
+ *  Nach der Erkennung der nicht mehr benötigten Property-Listen ("Müll") müssen
+ *  sie aus der Tabelle entfernt und die entstehenden "Löcher" gestopft werden
+ *  (Kompaktifizierung).
+ *)
+
+
+  FROM SExprs IMPORT
+    (* TYPE      *) SExpr;
+
+
+  PROCEDURE LookUpBuf (VAR PList : SExpr);
+
+  (*  Mit 'LookUpBuf (PList)' wird für die Zeichenfolge im Puffer der
+   *  Repräsentationstabelle die zugehörige Property-Liste in der Symboltabelle
+   *  ermittelt und in 'PList' geliefert. Existiert keine solche Property-Liste,
+   *  so wird eine neue erzeugt und der Pufferinhalt wird als ihre
+   *  Repräsentation eingetragen.
+   *  Dabei kann ein Speicherüberlauf auftreten, der in 'Registers.OutOfMem'
+   *  angezeigt wird!
+   *)
+
+
+  PROCEDURE GetFirstPList (VAR PList : SExpr; VAR Valid : BOOLEAN);
+
+  (*  Mit 'GetFirstPList (PList, Valid)' wird die erste Property-Liste der
+   *  Symboltabelle die aktuelle. Diese wird in 'PList' geliefert und 'Valid'
+   *  ist falsch, gdw. die Tabelle leer ist.
+   *)
+
+
+  PROCEDURE GetNextPList (VAR PList : SExpr; VAR Valid : BOOLEAN);
+
+  (*  Mit 'GetNextPList (PList, Valid)' wird die nächste Property-Liste nach der
+   *  aktuellen selbst die aktuelle. Diese wird in 'PList' geliefert.
+   *  Erst wenn beim Aufruf die letzte Property-Liste die aktuelle ist, wird
+   *  'Valid' falsch.
+   *)
+
+
+  PROCEDURE CompactObList (VAR Len : CARDINAL);
+
+  (*  Mit 'CompactObList (Len)' werden die Property-Listen, die nicht markiert
+   *  sind, aus der Symboltabelle entfernt und die Repräsentationen der übrigen
+   *  in der Repräsentationstabelle kompaktifiziert, wobei die Größe des frei-
+   *  gewordenen Speicherbereichs (in Zeichen) in 'Len' geliefert wird.
+   *  Außerdem werden alle Paare, die zur Verkettung der Property-Listen
+   *  benötigt werden, markiert.
+   *)
+
+
+END ObList.

@@ -1,0 +1,52 @@
+DEFINITION MODULE Stacks;   (* ProCoLi 01/89 *)
+
+(*  Datentyp "Keller"
+ *
+ *  Dieses Modul enthält den Datentyp "Keller" mit entsprechenden Operationen
+ *  und Prädikaten, der im Interpreter zur Speicherung von Zuständen, Zwischen-
+ *  ergebnissen und Variablenbindungen verwendet wird.
+ *)
+
+
+  FROM SExprs IMPORT
+    (* TYPE      *) SExpr;
+
+
+
+  PROCEDURE isEmptyStack (Stack : SExpr) : BOOLEAN;
+
+  (*  Das Prädikat 'isEmptyStack (Stack)' ist wahr, gdw. der Keller 'Stack' leer
+   *  ist.
+   *)
+
+
+  PROCEDURE EmptyStack () : SExpr;
+
+  (*  Das Resultat von 'EmptyStack ()' ist ein leerer Keller.
+   *)
+
+
+  PROCEDURE Top (Stack : SExpr) : SExpr;
+
+  (*  Das Resultat von 'Top (Stack)' ist der oberste S-Ausdruck des nichtleeren
+   *  Kellers 'Stack'.
+   *)
+
+
+  PROCEDURE Push (VAR Stack : SExpr; sx : SExpr);
+
+  (*  Mit 'Push (Stack, sx)' wird der S-Ausdruck 'sx' auf den Keller 'Stack'
+   *  gelegt.
+   *  Dabei kann ein Speicherüberlauf auftreten, der in 'Registers.OutOfMem'
+   *  angezeigt wird!
+   *)
+
+
+  PROCEDURE Pop (VAR Stack, sx : SExpr);
+
+  (*  Mit 'Pop (Stack, sx)' wird der oberste S-Ausdruck des nichtleeren Kellers
+   *  'Stack' in 'sx' geliefert und vom Keller entfernt.
+   *)
+
+
+END Stacks.

@@ -1,0 +1,103 @@
+DEFINITION MODULE SafeSExprs;
+
+(* --- mdiers 03.11.93
+   --- Version für TopSpeed-Modula-2: kan 09.06.94
+
+   Dieses Modul dient zum sicheren "Verpacken" des Moduls "SExprs".
+   Im Gegensatz zum Modul "SExprs" werden Prozedurparameter in diesem
+   Modul (soweit möglich) überprüft, so daß fatale Fehler gemeldet werden.
+   Dieses Modul ist zum Einsatz während der Testphase von ProCoLi bestimmt
+   und muß schließlich gegen das reguläre Modul "SExprs" ausgetauscht
+   werden.
+
+   Mit anderen Worten: der Interpreter muß auch funktionieren, wenn alle
+   Importe aus "SafeSExprs" durch Importe aus "SExprs" substituiert werden.
+
+   Die zum Verpacken benutzte Technik gehört zum Standardrepertoire einer
+   Modul-2-Programmiererin; deshalb bekommt ihr auch das
+   Implementierungsmodul in die Hand.
+
+   Zur Beschreibung der exportierten Objekte verweise ich auf das
+   Definitionsmodul von "SExprs". In "SafeSExprs" wird nur das
+   Sonderverhalten der Operationen bei Fahlbenutzung beschrieben,
+   wohingegen das Verhalten im Normalfall genau dem der Operationen in
+   "SExprs" entspricht.
+
+   Anm.: Ihr müßt euch entscheiden, ob ihr lieber die "unsichere Tour"
+   mit "SExprs" oder vielleicht doch lieber die "weniger unsichere Tour"
+   mit "SafeSExprs" fahren wollt; beides gemischt geht nicht! (Und warum?)
+   Für ersteres spricht der hohe didaktische Wert: ihr werdet mit
+   zunehmender Dauer des Praktikums die hohe Kunst des Fehlervermeidens
+   um jeden Preis erlernt haben. Für letzteres spricht, daß ihr meistens
+   noch feststellen könnt, an welcher Stelle euer Programm abgeschmiert
+   ist.
+
+ *)
+
+  IMPORT SExprs;
+
+  TYPE
+    SExpr = SExprs.SExpr;
+
+  VAR
+    Nil : SExpr;
+
+  PROCEDURE isPairPtr (sx : SExpr) : BOOLEAN;
+
+  PROCEDURE isNumb (sx : SExpr) : BOOLEAN;
+
+  PROCEDURE Numb (Value : INTEGER) : SExpr;
+
+  PROCEDURE Value (Numb : SExpr) : INTEGER;
+  (*
+     Programmabbruch, falls 'Numb' keine Zahl bezeichnet.
+   *)
+
+  PROCEDURE AssignPair (VAR PairPtr : SExpr; LeftPart, RightPart : SExpr);
+  (*
+     Programmabbruch, falls 'PairPtr' kein zulässiger Zeiger auf ein Paar ist.
+   *)
+
+  PROCEDURE LeftPart (PairPtr : SExpr) : SExpr;
+  (*
+     Programmabbruch, falls 'PairPtr' kein zulässiger Zeiger auf ein Paar ist.
+   *)
+
+  PROCEDURE RightPart (PairPtr : SExpr) : SExpr;
+  (*
+     Programmabbruch, falls 'PairPtr' kein zulässiger Zeiger auf ein Paar ist.
+   *)
+
+  PROCEDURE HitCount (PairPtr : SExpr) : CARDINAL;
+  (*
+     Programmabbruch, falls 'PairPtr' kein zulässiger Zeiger auf ein Paar ist.
+   *)
+
+  PROCEDURE ReplLeftPart (PairPtr, LeftPart : SExpr);
+  (*
+     Programmabbruch, falls 'PairPtr' kein zulässiger Zeiger auf ein Paar ist.
+   *)
+
+  PROCEDURE ReplRightPart (PairPtr, RightPart : SExpr);
+  (*
+     Programmabbruch, falls 'PairPtr' kein zulässiger Zeiger auf ein Paar ist.
+   *)
+
+  PROCEDURE ReplHitCount (PairPtr : SExpr; HitCount : CARDINAL);
+  (*
+     Programmabbruch, falls 'PairPtr' kein zulässiger Zeiger auf ein Paar ist.
+   *)
+
+  PROCEDURE SetFlag (VAR sx : SExpr);
+
+  PROCEDURE Flag (sx : SExpr) : BOOLEAN;
+
+  VAR
+    FirstPair : SExpr;
+
+  PROCEDURE NextPair (VAR PairPtr : SExpr; VAR Valid : BOOLEAN);
+  (*
+     Programmabbruch, falls 'PairPtr' kein zulässiger Zeiger auf ein Paar ist.
+   *)
+
+END SafeSExprs.

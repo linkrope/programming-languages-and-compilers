@@ -1,0 +1,95 @@
+"(", ")", "{", "}", "[", "]", "=", "#", "<", "<=", ">", ">=",
+"&", "~", "^", "+", "-", "*", "/", "|", ",", ";", ":", ":=", ".", "..",
+integer, real, long, char, string, ident,
+
+ARRAY, BEGIN, BY, CASE, CONST, DIV, DO, ELSE, ELSIF, END, EXIT, FOR,
+IF, IMPORT, IN, IS, LOOP, MOD, MODULE, NIL, OF, OR, POINTER, PROCEDURE,
+RECORD, REPEAT, RETURN, THEN, TO, TYPE, UNTIL, VAR, WHILE, WITH;
+
+ConstExpression, type, ArrayType, length, RecordType, BaseType,
+FieldListSequence, FieldList, IdentList, PointerType, ProcedureType, ExpList,
+expression, relation, SimpleExpression, AddOperator, term, MulOperator, factor,
+expression1, set, element, assignmentOrProcCall1, IfStatement,
+CaseStatement, case, CaseLabelList, CaseLabels, WhileStatement, RepeatStatement,
+LoopStatement, ForStatement, WithStatement, ProcedureHeading1, ProcedureBody,
+DeclarationSequence, FormalParameters, FPSection, FormalType,
+module, ImportList, import.
+
+Oberon = module.
+number = (integer | real | long).
+qualident = ident ["." ident].
+identdef = ident ["*"].
+ConstantDeclaration = identdef "=" ConstExpression.
+ConstExpression = expression.
+TypeDeclaration = identdef "=" type.
+type = (qualident | ArrayType | RecordType | PointerType | ProcedureType).
+ArrayType = ARRAY length {"," length} OF type.
+length = ConstExpression.
+RecordType = RECORD ["(" BaseType ")"] FieldListSequence END.
+BaseType = qualident.
+FieldListSequence = FieldList {";" FieldList}.
+FieldList = [IdentList ":" type].
+IdentList = identdef {"," identdef}.
+PointerType = POINTER TO type.
+ProcedureType = PROCEDURE [FormalParameters].
+VariableDeclaration = IdentList ":" type.
+designatorOrProcCall1 =
+  {("." ident | "[" ExpList "]" | "^")}
+  ["(" (qualident ( ")" designatorOrProcCall1 |
+  expression1 ["," ExpList] ")") | [ExpList] ")")].
+ExpList = expression {"," expression}.
+expression = SimpleExpression [relation SimpleExpression].
+relation = ("=" | "#" | "<" | "<=" | ">" | ">=" | IN | IS).
+SimpleExpression = [("+" | "-")] term {AddOperator term}.
+AddOperator = ("+" | "-" | OR).
+term = factor {MulOperator factor}.
+MulOperator = ("*" | "/" | DIV | MOD | "&").
+factor =
+  (number | char | string | NIL | set | qualident designatorOrProcCall1 |
+  "(" expression ")" | "~" factor).
+expression1 =
+  designatorOrProcCall1 {MulOperator factor} {AddOperator term}
+  [relation SimpleExpression].
+set = "{" [element {"," element}] "}".
+element = expression [".." expression].
+statement =
+  [(qualident assignmentOrProcCall1 | IfStatement | CaseStatement |
+  WhileStatement | RepeatStatement | LoopStatement | ForStatement |
+  WithStatement | EXIT | RETURN [expression])].
+assignmentOrProcCall1 =
+  {("." ident | "[" ExpList "]" | "^")}
+  [("(" (qualident ( ")" assignmentOrProcCall1 |
+  expression1 ["," ExpList] ")") | [ExpList] ")") | ":=" expression)].
+StatementSequence = statement {";" statement}.
+IfStatement =
+  IF expression THEN StatementSequence
+  {ELSIF expression THEN StatementSequence}
+  [ELSE StatementSequence] END.
+CaseStatement = CASE expression OF case {"|" case} [ELSE StatementSequence] END.
+case = [CaseLabelList ":" StatementSequence].
+CaseLabelList = CaseLabels {"," CaseLabels}.
+CaseLabels = ConstExpression [".." ConstExpression].
+WhileStatement = WHILE expression DO StatementSequence END.
+RepeatStatement = REPEAT StatementSequence UNTIL expression.
+LoopStatement = LOOP StatementSequence END.
+ForStatement =
+  FOR ident ":=" expression TO expression [BY ConstExpression] DO
+  StatementSequence END.
+WithStatement = WITH qualident ":" qualident DO StatementSequence END.
+ProcedureDeclaration1 = ProcedureHeading1 ";" ProcedureBody ident.
+ProcedureHeading1 = ["*"] identdef [FormalParameters].
+ProcedureBody = DeclarationSequence [BEGIN StatementSequence] END.
+ForwardDeclaration1 = "^" identdef [FormalParameters].
+DeclarationSequence =
+  {(CONST {ConstantDeclaration ";"} |
+  TYPE {TypeDeclaration ";"} |
+  VAR {VariableDeclaration ";"})}
+  {PROCEDURE (ProcedureDeclaration1 ";" | ForwardDeclaration1 ";")}.
+FormalParameters = "(" [FPSection {";" FPSection}] ")" [":" qualident].
+FPSection = [VAR] ident {"," ident} ":" FormalType.
+FormalType = ({ARRAY OF} qualident | ProcedureType).
+module =
+  MODULE ident ";" [ImportList] DeclarationSequence
+  [BEGIN StatementSequence] END ident ".".
+ImportList = IMPORT import {"," import} ";".
+import = ident [":=" ident].

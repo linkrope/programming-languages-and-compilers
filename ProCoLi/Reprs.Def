@@ -1,0 +1,88 @@
+DEFINITION MODULE Reprs;   (* ProCoLi 02/94 *)
+
+(*  Repräsentationen von Namen
+ *
+ *  Dieses Modul enthält die Repräsentationstabelle für die Ein-/Ausgabe von
+ *  Namen.
+ *
+ *  Zeichenfolgen können zeichenweise in einen Puffer eingetragen werden;
+ *  der Pufferinhalt kann mit anderen Repräsentationen verglichen und selbst als
+ *  Repräsentation eingetragen werden. Die Repräsentationen werden bei der
+ *  Eintragung eineindeutig durch Zahlen codiert, wobei jedoch vom Benutzer des
+ *  Moduls sicherzustellen ist, daß gleiche Zeichenfolgen auf gleiche Zahlen
+ *  abgebildet werden (durch Suche des Pufferinhalts in der Repräsentations-
+ *  tabelle).
+ *  Das Eintragen von Zeichen und Repräsentationen führt bei voller Tabelle zum
+ *  Garbage Collection.
+ *  Dabei können "Löcher" in der Repräsentationstabelle durch nicht mehr
+ *  benötigte Property-Listen entstehen, die bei der darauffolgenden
+ *  Kompaktifizierung der noch benötigten Repräsentationen zum Ende der Tabelle
+ *  verschoben werden. Somit wird eine Änderung der Codierung erforderlich.
+ *)
+
+
+  FROM FIO IMPORT
+    (* TYPE      *) File;
+
+
+  PROCEDURE AppChar (c : CHAR);
+
+  (*  Mit 'AppChar (c)' wird das Zeichen 'c' am Ende an die Zeichenfolge im
+   *  Puffer angehängt.
+   *  Dabei kann ein Speicherüberlauf auftreten, der in 'Registers.OutOfMem'
+   *  angezeigt wird!
+   *)
+
+
+  PROCEDURE eqBuf (Repr : CARDINAL) : BOOLEAN;
+
+  (*  Das Prädikat 'eqBuf (Repr)' ist wahr, gdw. die durch 'Repr' codierte
+   *  Zeichenfolge gleich der Zeichenfolge im Puffer ist.
+   *)
+
+
+  PROCEDURE ClearBuf;
+
+  (*  Mit 'ClearBuf' wird die Zeichenfolge im Puffer gelöscht.
+   *)
+
+
+  PROCEDURE EnterBuf (VAR Repr : CARDINAL);
+
+  (*  Mit 'EnterBuf (Repr)' wird die Zeichenfolge im Puffer als Repräsentation
+   *  eingetragen und die Codierung in 'Repr' geliefert.
+   *  Der Pufferinhalt ist anschließend undefiniert.
+   *  Dabei kann ein Speicherüberlauf auftreten, der in 'Registers.OutOfMem'
+   *  angezeigt wird!
+   *  Diese Prozedur darf nur dann aufgerufen werden, wenn die Zeichenfolge im
+   *  Puffer noch nicht in der Repräsentationstabelle enthalten ist!
+   *)
+
+
+  PROCEDURE WriteRepr (f : File; Repr : CARDINAL);
+
+  (*  Mit 'WriteRepr (Repr)' wird die durch 'Repr' codierte Zeichenfolge in
+   *  die Standardausgabe geschrieben.
+   *)
+
+
+  PROCEDURE MoveRepr (VAR Repr : CARDINAL);
+
+  (*  Mit 'MoveRepr (Repr)' wird bei der Kompaktifizierung die durch 'Repr'
+   *  codierte Zeichenfolge über nicht mehr benötigte Repräsentationen (solche,
+   *  für die 'MoveRepr' nicht aufgerufen wurde) hinweg verschoben. Die neue
+   *  Codierung wird in 'Repr' geliefert.
+   *  Diese Prozedur muß für alle noch benötigten Repräsentationen genau einmal
+   *  in der Reihenfolge ihrer Eintragung aufgerufen werden!
+   *)
+
+
+  PROCEDURE EndCompactReprs (VAR Len : CARDINAL);
+
+  (*  Mit 'EndCompactReprs (Len)' wird die Kompaktifizierung der
+   *  Repräsentationen abgeschlossen und die Größe des freien Speicherbereichs
+   *  (in Zeichen) in 'Len' geliefert.
+   *)
+
+
+END Reprs.

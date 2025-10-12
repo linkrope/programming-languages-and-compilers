@@ -1,0 +1,38 @@
+DEFINITION MODULE LISPIO;   (* ProCoLi 02/94 *)
+
+(*  Ein-/Ausgabe-LISP-Funktionen
+ *
+ *  Dieses Modul enthält die Ein-/Ausgabe-LISP-Funktionen des Interpreters.
+ *  Nur PRINT und READ sind implementiert.
+ *)
+
+
+  PROCEDURE PrintSubr;
+
+  (*  Mit 'PrintSubr' wird der S-Ausdruck in der Liste 'Registers.Args' auf die
+   *  Standard-Ausgabe geschrieben und im Register 'Registers.Val' geliefert.
+   *)
+
+
+  PROCEDURE ReadSubr;
+
+  (*  Mit 'ReadSubr' wird ein S-Ausdruck von der Standard-Eingabe eingelesen und
+   *  im Register 'Registers.Val' geliefert. 'Registers.Args' muß eine leere
+   *  Liste enthalten.
+   *)
+
+  PROCEDURE NewLineSubr;
+
+  (*  Mit 'NewLine' wird ein Zeilen-Vorschub in der Standard-Ausgabe
+   *  erzeugt. Im Register 'Registers.Val' wird der Wert NIL geliefert.
+   *)
+
+  PROCEDURE SpacesSubr;
+
+  (*  Mit 'Spaces' wird 'Registers.Args' Leerzeichen auf die Standard-
+   *  Ausgabe geschrieben. Im Register 'Registers.Val' wird der Wert NIL
+   *  geliefert.
+   *)
+
+
+END LISPIO.

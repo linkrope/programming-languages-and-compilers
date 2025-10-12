@@ -1,0 +1,38 @@
+DEFINITION MODULE Registers;   (* ProCoLi 01/89 *)
+
+(*  Register des Interpreters
+ *
+ *  Dieses Modul enthält die globalen Variablen des Interpreters.
+ *
+ *  Die S-Ausdrücke werden beim Garbage Collection benutzt, um alle "aktiven"
+ *  Paare zu erkennen und den Rest als "Müll" einzusammeln.
+ *  Eine erfolglose Speicherwiedergewinnung wird in 'OutOfMem' angezeigt.
+ *
+ *)
+
+
+  FROM SExprs IMPORT
+    (* TYPE      *) SExpr;
+
+  VAR
+    OutOfMem : BOOLEAN;         (* Anzeige eines Speicherüberlaufs  *)
+
+    Temp,                       (* Zwischenspeicher (für 'ObList')  *)
+
+    Expr,                       (* Zwischenspeicher                 *)
+    Args,                       (* Argumentliste                    *)
+    Val,                        (* Funktionswert                    *)
+
+    Data,                       (* Keller für Zwischenergebnisse    *)
+    Control,                    (* Keller für Zustünde              *)
+    Env      : SExpr;           (* Keller für Bindungen             *)
+
+
+  PROCEDURE ResetRegs;
+
+  (*  Mit 'ResetRegs' erhalten alle Register den ausgezeichneten S-Ausdruck
+   *  'SExprs.Nil' als Wert, und 'OutOfMem' zeigt keinen Speicherüberlauf an.
+   *)
+
+
+END Registers.

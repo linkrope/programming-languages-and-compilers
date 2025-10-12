@@ -1,0 +1,80 @@
+DEFINITION MODULE PLists;   (* ProCoLi 01/89 *)
+
+(*  Datentyp "Property-Liste"
+ *
+ *  Dieses Modul enthält den Datentyp "Property-Liste" mit entsprechenden
+ *  Operationen und Prädikaten, der zur Darstellung von Namen (Atome, die keine
+ *  ganzen Zahlen sind) verwendet wird.
+ *
+ *  In einer Property-Liste ist die Codierung der Repräsentation des zugehörigen
+ *  Namens vermerkt, und in Einträgen mit Indikatoren (Atome) sind Eigenschaften
+ *  des Namens eindeutig definiert.
+ *)
+
+
+  FROM SExprs IMPORT
+    (* TYPE      *) SExpr;
+
+
+  PROCEDURE NewPList (VAR PList : SExpr);
+
+  (*  Mit 'NewPList (PList)' wird die Property-Liste eines neuen Namens angelegt
+   *  und in 'PList' geliefert. Die Codierung der Repräsentation des Namens ist
+   *  noch undefiniert.
+   *  Dabei kann ein Speicherüberlauf auftreten, der in 'Registers.OutOfMem'
+   *  angezeigt wird!
+   *  Die Prozedur 'NewPList' wird nicht mit der Codierung der Repräsentation
+   *  parametrisiert, da sich diese durch die Kompaktifizierung beim Garbage
+   *  Collection für die Erzeugung der Property-Liste ändern könnte.
+   *)
+
+
+  PROCEDURE PListRepr (PList : SExpr) : CARDINAL;
+
+  (*  Das Resultat von 'PListRepr (PList)' ist die Codierung der Repräsentation
+   *  der Property-Liste 'PList'.
+   *)
+
+
+  PROCEDURE PutRepr (PList : SExpr; Repr : CARDINAL);
+
+  (*  Mit 'PutRepr (PList, Repr)' wird 'Repr' als Codierung der Repräsentation
+   *  in die Property-Liste 'PList' eingetragen.
+   *)
+
+
+  PROCEDURE isEmptyPList (PList : SExpr) : BOOLEAN;
+
+  (*  Das Prädikat 'isEmptyPList (PList)' ist wahr, gdw. die Property-Liste
+   *  'PList' außer der Codierung der Repräsentation keine weiteren Einträge
+   *  enthält (d.h. potentieller "Müll" ist).
+   *)
+
+
+  PROCEDURE GetProp (PList, Ind : SExpr; VAR Prop : SExpr; VAR Valid : BOOLEAN);
+
+  (*  Mit 'GetProp (PList, Ind, Prop, Valid)' wird in der Property-Liste 'PList'
+   *  der Eintrag mit dem Indikator 'Ind' bestimmt und die Eigenschaft in 'Prop'
+   *  geliefert. 'Valid' ist genau dann falsch, wenn kein solcher Eintrag
+   *  existiert.
+   *)
+
+
+  PROCEDURE PutProp (PList, Ind, Prop : SExpr);
+
+  (*  Mit 'PutProp (PList, Ind, Prop) wird in der Property-Liste 'PList' ein
+   *  neuer Eintrag mit dem Indikator 'Ind' und der Eigenschaft 'Prop' erzeugt.
+   *  Wenn ein alter Eintrag mit dem gleichen Indikator existiert, wird dieser
+   *  gelöscht. Andernfalls kann ein Speicherüberlauf auftreten, der in
+   *  'Registers.OutOfMem' angezeigt wird!
+   *)
+
+
+  PROCEDURE RemProp (PList, Ind : SExpr);
+
+  (*  Mit 'RemProp (PList, Ind)' wird in der Property-Liste 'PList' der Eintrag
+   *  mit dem Indikator 'Ind' gelöscht.
+   *)
+
+
+END PLists.

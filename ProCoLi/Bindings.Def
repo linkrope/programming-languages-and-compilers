@@ -1,0 +1,38 @@
+DEFINITION MODULE Bindings;   (* ProCoLi 02/89 *)
+
+(*  Variablenbindung
+ *
+ *  Dieses Modul enthält die Prozeduren zur Bindung von LABEL-Namen und LAMBDA-
+ *  Variablen für den Interpreter.
+ *
+ *  Als Bindungsstrategie wird "shallow-access" verwendet, d.h. die aktuellen
+ *  Bindungen sind in den Property-Listen der Variablen unter dem Indikator VAR
+ *  eingetragen, und die alten Bindungen sind in einem Keller abgelegt.
+ *)
+
+
+  FROM SExprs IMPORT
+    (* TYPE      *) SExpr;
+
+
+  PROCEDURE Bind (Var, Arg : SExpr);
+
+  (*  Mit 'Bind (Var, Arg)' wird die Variable 'Var' an den Wert 'Arg' gebunden.
+   *  Ein Fehler oder ein Speicherüberlauf wird gemeldet und in 'Errors.Abort'
+   *  angezeigt.
+   *)
+
+
+  PROCEDURE UnBind;
+
+  (*  Mit 'UnBind' wird die letzte Bindung rückgängig gemacht.
+   *)
+
+
+  PROCEDURE UnBindAll;
+
+  (*  Mit 'UnBindAll' werden im Fehlerfall alle Bindungen rückgängig gemacht.
+   *)
+
+
+END Bindings.

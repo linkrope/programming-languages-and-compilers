@@ -1,0 +1,20 @@
+DEFINITION MODULE Interpreter;   (* ProCoLi 02/89 *)
+
+(*  Interpretation einer Funktionsanwendung
+ *
+ *  Dieses Modul enthält den eigentlichen LISP-Interpreter, der die universelle
+ *  Funktion EVALQUOTE realisiert.
+ *  Eine Funktionsanwendung besteht dabei aus zwei S-Ausdrücken (Doublette), von
+ *  denen der erste die Funktion und der zweite die Liste der Argumente angibt.
+ *)
+
+
+  PROCEDURE Interpret (VAR Stop : BOOLEAN);
+
+  (*  Mit 'Interpret (Stop)' wird eine Funktionsanwendung eingelesen, ausgeführt
+   *  und das Ergebnis oder eine Fehlermeldung ausgegeben.
+   *  'Stop' ist genau dann wahr, wenn das Abbruch-Kommando eingegeben wurde.
+   *)
+
+
+END Interpreter.

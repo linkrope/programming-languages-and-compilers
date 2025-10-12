@@ -1,0 +1,183 @@
+DEFINITION MODULE SExprs;   (* ProCoLi 04/96 *)
+
+(*  Datentyp "S-Ausdruck" / Bereitstellung eines Pools von Paaren
+ *
+ *  Dieses Modul enthält den Basis-Datentyp "S-Ausdruck" mit entsprechenden
+ *  Operationen und Prädikaten.
+ *  Außerdem wird ein Pool von Paaren von S-Ausdrücken bereitgestellt,
+ *  auf die sequentiell zugegriffen werden kann.
+ *
+ *  Die Zusammenfassung ist wegen der Implementierung erforderlich.
+ *  Aus Effizienzgründen wird die Korrektheit der Prozedurparameter nicht
+ *  überprüft, weshalb fatale Fehler nicht gemeldet werden.
+ *
+ *  In dieser Repräsentation von S-Ausdrücken sind "Zeiger" auf Paare
+ *  realisiert als Indizes in den (hier) statisch vereinbarten 'Pool' von
+ *  Paaren von S-Ausdrücken.
+ *
+ *  Die (ansonsten als Konstante aufzufassende) Variable 'Nil' ist ein
+ *  besonderer, ungekennzeichneter "Zeiger" auf ein Paar, der nicht
+ *  dereferenziert werden darf.
+ *
+ *  Anm.: Um symbolisches Debugging von S-Ausdrücken zu erleichtern, legt
+ *  die hiesige Implementierung die Datentypen 'SExprs' u. 'Pair' offen,
+ *  und beide entsprechen der Modellvorstellung unmittelbar. Beides ist
+ *  ohne weiteres auch anders zu realisieren (und in der Vergangenheit auch
+ *  schon anders realisiert gewesen: 'SExprs' war opaque, und dieses Modul
+ *  entsprach insofern vollkommen der Sichtweise eines "abstrakten Datentyps
+ *  S-Ausdruck").
+ *)
+
+
+  TYPE
+    Access = (NUMB, PAIRPTR);
+    SExpr  = RECORD
+               Flag : BOOLEAN;
+               CASE Kind : Access OF
+                 NUMB    : Value    : INTEGER
+               | PAIRPTR : PairPtr  : CARDINAL
+               END (* CASE *)
+             END (* RECORD *);
+    Pair   = RECORD
+               LeftPart, RightPart : SExpr;
+               HitCount            : [0 .. 3]
+             END (* RECORD *);
+  CONST
+    NrOfPairs = 64500 DIV SIZE (Pair);
+  VAR
+    Pool : ARRAY [0 .. NrOfPairs - 1] OF
+             RECORD
+               LeftPart, RightPart : SExpr;
+               HitCount            : [0 .. 3]
+             END (* RECORD *);
+
+    (*
+     *  Ein S-Ausdruck bezeichnet entweder eine ganze Zahl oder einen
+     *  Zeiger auf ein Paar von S-Ausdrücken.
+     *  Ein Paar besteht aus einem Linksteil und einem Rechtsteil, die
+     *  wieder S-Ausdrücke sind, und zusätzlich einem Trefferzähler, der
+     *  für Traversierungen verwendet wird.
+     *  Die Kennzeichnung eines S-Ausdrucks zeigt dessen besondere
+     *  Bedeutung an:
+     *  Eine gekennzeichnete Zahl ist der Interpreter-Code einer Funktion
+     *  oder die Repräsentation eines Namens, und ein gekennzeichneter
+     *  Zeiger auf ein Paar weist auf den Anfang der Property-Liste
+     *  eines Namens.
+     *)
+
+
+  VAR
+    Nil : SExpr;
+
+    (*  Die Konstante 'Nil' ist ein spezieller S-Ausdruck ohne Kennzeichnung,
+     *  der einen Zeiger bezeichnet, welcher auf kein gültiges Paar weist,
+     *  also auch nicht dereferenziert werden darf.
+     *)
+
+
+  PROCEDURE isPairPtr (sx : SExpr) : BOOLEAN;
+
+  (*  Das Prädikat 'isPairPtr (sx)' ist wahr, gdw. 'sx' einen Zeiger auf ein
+   *  Paar bezeichnet.
+   *)
+
+
+  PROCEDURE isNumb (sx : SExpr) : BOOLEAN;
+
+  (*  Das Prädikat 'isNumb (sx)' ist wahr, gdw. 'sx' eine Zahl bezeichnet.
+   *)
+
+
+  PROCEDURE Numb (Value : INTEGER) : SExpr;
+
+  (*  Das Resultat von 'Numb (Value)' ist ein S-Ausdruck ohne Kennzeichnung,
+   *  der eine Zahl mit dem Wert 'Value' bezeichnet.
+   *)
+
+
+  PROCEDURE Value (Numb : SExpr) : INTEGER;
+
+  (*  Das Resultat von 'Value (Numb)' ist der Wert der durch 'Numb'
+   *  bezeichneten Zahl.
+   *)
+
+  PROCEDURE AssignPair (VAR PairPtr : SExpr; LeftPart, RightPart : SExpr);
+
+  (*  Mit 'AssignPair (PairPtr, LeftPart, RightPart)' werden in dem Paar,
+   *  auf das der durch 'PairPtr' bezeichnete Zeiger weist, der Linksteil
+   *  und der Rechtsteil durch 'LeftPart' bzw. 'RightPart' ersetzt, und
+   *  der Trefferzähler wird auf Null gesetzt.
+   *  Die Kennzeichnung von 'PairPtr' wird ebenfalls gelöscht.
+   *)
+
+
+  PROCEDURE LeftPart (PairPtr : SExpr) : SExpr;
+
+  (*  Das Resultat von 'LeftPart (PairPtr)' ist der Linksteil des Paars,
+   *  auf das der durch 'PairPtr' bezeichnete Zeiger weist.
+   *)
+
+
+  PROCEDURE RightPart (PairPtr : SExpr) : SExpr;
+
+  (*  Das Resultat von 'RightPart (PairPtr)' ist der Rechtsteil des Paars,
+   *  auf das der durch 'PairPtr' bezeichnete Zeiger weist.
+   *)
+
+
+  PROCEDURE HitCount (PairPtr : SExpr) : CARDINAL;
+
+  (*  Das Resultat von 'HitCount (PairPtr)' ist der Wert des Trefferzählers
+   *  des Paars, auf das der durch 'PairPtr' bezeichnete Zeiger weist.
+   *)
+
+
+  PROCEDURE ReplLeftPart (PairPtr, LeftPart : SExpr);
+
+  (*  Mit 'ReplLeftPart (PairPtr, LeftPart)' wird der Linksteil des Paars,
+   *  auf das der durch 'PairPtr' bezeichnete Zeiger weist, durch 'LeftPart'
+   *  ersetzt.
+   *)
+
+
+  PROCEDURE ReplRightPart (PairPtr, RightPart : SExpr);
+
+  (*  Mit 'ReplRightPart (PairPtr, RightPart)' wird der Rechtsteil des Paars,
+   *  auf das der durch 'PairPtr' bezeichnete Zeiger weist, durch 'RightPart'
+   *  ersetzt.
+   *)
+
+
+  PROCEDURE ReplHitCount (PairPtr : SExpr; HitCount : CARDINAL);
+
+  (*  Mit 'ReplHitCount (PairPtr, HitCount)' wird der Trefferzähler des Paars,
+   *  auf das der durch 'PairPtr' bezeichnete Zeiger weist, durch 'HitCount'
+   *  (0 <= 'HitCount' <= 3) ersetzt.
+   *)
+
+
+  PROCEDURE SetFlag (VAR sx : SExpr);
+
+  (*  Mit 'SetFlag (sx)' wird 'sx' gekennzeichnet.
+   *)
+
+
+  PROCEDURE Flag (sx : SExpr) : BOOLEAN;
+
+  (*  Das Prädikat 'Flag (sx)' ist wahr, gdw. 'sx' gekennzeichnet ist.
+   *)
+
+
+  VAR
+    FirstPair : SExpr;         (* Zeiger auf das erste Paar im Speicher  *)
+
+
+  PROCEDURE NextPair (VAR PairPtr : SExpr; VAR Valid : BOOLEAN);
+
+  (*  Mit 'NextPair (PairPtr, Valid)' wird der durch 'PairPtr' bezeichnete
+   *  Zeiger auf das nächste Paar im Speicher gesetzt.
+   *  Erst beim Aufruf mit dem letzten Paar wird 'Valid' falsch.
+   *)
+
+
+END SExprs.

@@ -1,0 +1,143 @@
+DEFINITION MODULE LISPArithmetic;   (* ProCoLi 02/94 *)
+
+(*  Arithmetische LISP-Funktionen und -Prädikate
+ *
+ *  Dieses Modul enthält die arithmetischen LISP-Funktionen des Interpreters.
+ *)
+
+
+
+  PROCEDURE PlusFSubr;
+
+  (*  Mit 'PlusFSubr' wird im Register 'Registers.Val' die Summe der ganzen
+   *  Zahlen in der ausgewerteten Liste 'Registers.Args' geliefert.
+   *)
+
+
+  PROCEDURE TimesFSubr;
+
+  (*  Mit 'TimesFSubr' wird im Register 'Registers.Val' das Produkt der ganzen
+   *  Zahlen in der ausgewerteten Liste 'Registers.Args' geliefert.
+   *)
+
+
+  PROCEDURE MaxFSubr;
+
+  (*  Mit 'MaxFSubr' wird im Register 'Registers.Val' das Maximum der ganzen
+   *  Zahlen in der ausgewerteten, nichtleeren Liste 'Registers.Args' geliefert.
+   *)
+
+
+  PROCEDURE MinFSubr;
+
+  (*  Mit 'MinFSubr' wird im Register 'Registers.Val' das Minimum der ganzen
+   *  Zahlen in der ausgewerteten, nichtleeren Liste 'Registers.Args' geliefert.
+   *)
+
+
+  PROCEDURE DifferenceSubr;
+
+  (*  Mit 'DifferenceSubr' wird im Register 'Registers.Val' die Differenz der
+   *  beiden ganzen Zahlen in der Liste 'Registers.Args' geliefert.
+   *  Dabei wird die zweite Zahl von der ersten subtrahiert.
+   *)
+
+
+  PROCEDURE QuotientSubr;
+
+  (*  Mit 'QuotientSubr' wird im Register 'Registers.Val' der Quotient der
+   *  beiden ganzen Zahlen in der Liste 'Registers.Args' geliefert.
+   *  Dabei wird die erste Zahl durch die zweite dividiert.
+   *)
+
+
+
+  PROCEDURE RemainderSubr;
+
+  (*  Mit 'RemainderSubr' wird im Register 'Registers.Val' der Rest der Division
+   *  der beiden ganzen Zahlen in der Liste 'Registers.Args' geliefert.
+   *  Dabei wird die erste Zahl durch die zweite dividiert.
+   *)
+
+
+  PROCEDURE DivideSubr;
+
+  (*  Mit 'DivideSubr' wird im Register 'Registers.Val' eine Liste geliefert,
+   *  deren erste Komponente der Quotient und deren zweite Komponente der Rest
+   *  der Division der beiden ganzen Zahlen in der Liste 'Registers.Args' ist.
+   *  Dabei wird die erste Zahl durch die zweite dividiert.
+   *)
+
+
+  PROCEDURE Add1Subr;
+
+  (*  Mit 'Add1Subr' wird im Register 'Registers.Val' die um eins erhöhte ganze
+   *  Zahl der Liste 'Registers.Args' geliefert.
+   *)
+
+
+  PROCEDURE Sub1Subr;
+
+  (*  Mit 'Sub1Subr' wird im Register 'Registers.Val' die um eins verminderte
+   *  ganze Zahl der Liste 'Registers.Args' geliefert.
+   *)
+
+
+  PROCEDURE MinusSubr;
+
+  (*  Mit 'MinusSubr' wird im Register 'Registers.Val' die ganze Zahl der Liste
+   *  'Registers.Args' mit umgekehrtem Vorzeichen geliefert.
+   *)
+
+
+  PROCEDURE ExPtSubr;
+
+  (*  Mit 'ExPtSubr' wird im Register 'Registers.Val' der Potenzwert der beiden
+   *  ganzen Zahlen in der Liste 'Registers.Args' geliefert.
+   *  Die erste Zahl gibt die Basis an, die zweite den Exponenten.
+   *)
+
+
+  PROCEDURE ZeroPSubr;
+
+  (*  Mit 'ZeroPSubr' wird überprüft, ob die ganze Zahl in der Liste
+   *  'Registers.Args' den Wert null hat. Im Register 'Registers.Val' wird der
+   *  entsprechende Wahrheitswert geliefert.
+   *)
+
+
+  PROCEDURE OnePSubr;
+
+  (*  Mit 'OnePSubr' wird überprüft, ob die ganze Zahl in der Liste
+   *  'Registers.Args' den Wert eins hat. Im Register 'Registers.Val' wird der
+   *  entsprechende Wahrheitswert geliefert.
+   *)
+
+
+  PROCEDURE MinusPSubr;
+
+  (*  Mit 'MinusPSubr' wird überprüft, ob die ganze Zahl in der Liste
+   *  'Registers.Args' einen negativen Wert hat. Im Register 'Registers.Val'
+   *  wird der entsprechende Wahrheitswert geliefert.
+   *)
+
+
+  PROCEDURE GreaterPSubr;
+
+  (*  Mit 'GreaterPSubr' wird für die beiden ganzen Zahlen in der Liste
+   *  'Registers.Args' überprüft, ob die erste Zahl größer als die zweite ist.
+   *  Im Register 'Registers.Val' wird der entsprechende Wahrheitswert
+   *  geliefert.
+   *)
+
+
+  PROCEDURE LessPSubr;
+
+  (*  Mit 'LessPSubr' wird für die beiden ganzen Zahlen in der Liste
+   *  'Registers.Args' überprüft, ob die erste Zahl kleiner als die zweite ist.
+   *  Im Registers 'Registers.Val' wird der entsprechende Wahrheitswert
+   *  geliefert.
+   *)
+
+
+END LISPArithmetic.

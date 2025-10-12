@@ -1,0 +1,47 @@
+"(", ")", "{", "}", "[", "]", "=", "#", "<", "<=", ">", ">=",
+"&", "~", "^", "+", "-", "*", "/", "|", ",", ";", ":", ":=", ".", "..",
+integer;
+
+Expr                           < VAR x : LONGINT >,
+Term                           < VAR x : LONGINT >,
+Factor                         < VAR x : LONGINT >,
+AddOp                          < VAR Add : BOOLEAN >,
+MulOp                          < VAR Mul : BOOLEAN >.
+
+Calc                           % VAR x : LONGINT;                              %
+       = Expr < x >            % Texts.WriteInt(W, x, 0);                      %
+         .
+Expr                           < VAR x : LONGINT >
+                               % VAR y : LONGINT; Add : BOOLEAN;               %
+       =                       % Add := TRUE;                                  %
+         [ ( "+"
+           | "-"               % Add := FALSE;                                 %
+           ) ]
+         Term < x >            % IF ~ Add THEN x := - x END;                   %
+         { AddOp < Add >
+           Term < y >          % IF Add THEN x := x + y                        %
+                               % ELSE x := x - y                               %
+                               % END;                                          %
+         } .
+AddOp                          < VAR Add : BOOLEAN >
+       = ( "+"                 % Add := TRUE;                                  %
+         | "-"                 % Add := FALSE;                                 %
+         ) .
+Term                           < VAR x : LONGINT >
+                               % VAR y : LONGINT; Mul : BOOLEAN;               %
+       = Factor < x >
+         { MulOp < Mul >
+           Factor < y >        % IF Mul THEN x := x * y                        %
+                               % ELSE x := x DIV y                             %
+                               % END;                                          %
+         } .
+MulOp                          < VAR Mul : BOOLEAN >
+       = ( "*"                 % Mul := TRUE;                                  %
+         | "/"                 % Mul := FALSE;                                 %
+         ) .
+Factor                         < VAR x : LONGINT >
+       = (                     % x := Scanner.Int;                             %
+           integer
+         | "(" Expr < x >
+           ")"
+         ) .

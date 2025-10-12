@@ -1,0 +1,89 @@
+DEFINITION MODULE Int;   (* ProCoLi 02/89 *)
+
+(*  Arithmetische Operationen auf ganzen Zahlen mit Fehleranzeige
+ *
+ *  Dieses Modul enthält die Operationen für die Realisierung der arithmetischen
+ *  LISP-Funktionen des Interpreters.
+ *
+ *  Fehler durch Implementierungsbeschränkungen oder undefinierte Berechnungen
+ *  führen nicht zum Programmabbruch, sondern werden durch einen entsprechenden
+ *  Rückgabewert angezeigt.
+ *)
+
+
+
+  TYPE
+    RetCode = (OK,                (* Alles in Ordnung     *)
+               OVERFLOW,          (* Ergebnis zu groß     *)
+               UNDERFLOW,         (* Ergebnis zu klein    *)
+               ZERODIV);          (* Division durch Null  *)
+
+
+  PROCEDURE Inc (VAR x : INTEGER; VAR rc : RetCode);
+
+  (*  Mit 'Inc (x, rc)' wird, wenn möglich, der Wert von 'x' um eins erhöht,
+   *  und 'rc' wird auf 'OK' gesetzt. Sonst zeigt 'rc' die Art des Fehlers an.
+   *)
+
+
+  PROCEDURE Dec (VAR x : INTEGER; VAR rc : RetCode);
+
+  (*  Mit 'Dec (x, rc)' wird, wenn möglich, der Wert von 'x' um eins vermindert,
+   *  und 'rc' wird auf 'OK' gesetzt. Sonst zeigt 'rc' die Art des Fehlers an.
+   *)
+
+
+  PROCEDURE Neg (VAR x : INTEGER; VAR rc : RetCode);
+
+  (*  Mit 'Neg (x, rc)' wird, wenn möglich, das Vorzeichen des Werts von 'x'
+   *  umgekehrt, und 'rc' wird auf 'OK' gesetzt. Sonst zeigt 'rc' die Art des
+   *  Fehlers an.
+   *)
+
+
+  PROCEDURE Add (x, y : INTEGER; VAR z : INTEGER; VAR rc : RetCode);
+
+  (*  Mit 'Add (x, y, z, rc)' werden, wenn möglich, die Werte von 'x' und 'y'
+   *  addiert und die Summe in 'z' geliefert, und 'rc' wird auf 'OK' gesetzt.
+   *  Sonst zeigt 'rc' die Art des Fehlers an.
+   *     rc = OK  ==>  z = x + y
+   *)
+
+
+  PROCEDURE Sub (x, y : INTEGER; VAR z : INTEGER; VAR rc : RetCode);
+
+  (*  Mit 'Sub (x, y, z, rc)' werden, wenn möglich, die Werte von 'x' und 'y'
+   *  subtrahiert und die Differenz in 'z' geliefert, und 'rc' wird auf 'OK'
+   *  gesetzt. Sonst zeigt 'rc' die Art des Fehlers an.
+   *     rc = OK  ==>  z = x - y
+   *)
+
+
+  PROCEDURE Mult (x, y : INTEGER; VAR z : INTEGER; VAR rc : RetCode);
+
+  (*  Mit 'Mult (x, y, z, rc)' werden, wenn möglich, die Werte von 'x' und 'y'
+   *  multipliziert und das Produkt in 'z' geliefert, und 'rc' wird auf 'OK'
+   *  gesetzt. Sonst zeigt 'rc' die Art des Fehlers an.
+   *     rc = OK  ==>  z = x * y
+   *)
+
+
+  PROCEDURE Div (x, y : INTEGER; VAR z : INTEGER; VAR rc : RetCode);
+
+  (*  Mit 'Div (x, y, z, rc)' werden, wenn möglich, die Werte von 'x' und 'y'
+   *  dividiert und der Quotient in 'z' geliefert, und 'rc' wird auf 'OK'
+   *  gesetzt. Sonst zeigt 'rc' die Art des Fehlers an.
+   *     rc = OK  ==>  z = x DIV y
+   *)
+
+
+  PROCEDURE Mod (x, y : INTEGER; VAR z : INTEGER; VAR rc : RetCode);
+
+  (*  Mit 'Mod (x, y, z, rc)' werden, wenn möglich, die Werte von 'x' und 'y'
+   *  dividiert und der Rest in 'z' geliefert, und 'rc' wird auf 'OK' gesetzt.
+   *  Sonst zeigt 'rc' die Art des Fehlers an.
+   *     rc = OK  ==>  z = x MOD y
+   *)
+
+
+END Int.

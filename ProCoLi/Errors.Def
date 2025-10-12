@@ -1,0 +1,59 @@
+DEFINITION MODULE Errors;   (* ProCoLi 06/92 *)
+
+(*  Fehlermeldungen
+ *
+ *  Dieses Modul enthält die Prozeduren zur Ausgabe von Fehlermeldungen des
+ *  Interpreters und der LISP-Funktionen.
+ *)
+
+
+  TYPE
+    ErrPos = (INIT,
+              INPUT,
+              EVALQUOTE, EVALFUN, APPLYLAMBDA, APPLYLABEL, BIND,
+              EVAL, EVALAPVAL, EVLIS, CALLSUBR, CALLFSUBR,
+
+              QUOTEFSUBR, LISTFSUBR, CONDFSUBR,
+              ANDFSUBR, ORFSUBR,
+              PLUSFSUBR, TIMESFSUBR, MAXFSUBR, MINFSUBR,
+
+              CONSSUBR, CARSUBR, CDRSUBR, ATOMSUBR, EQSUBR,
+              NOTSUBR, NUMBERPSUBR, RPLACASUBR, RPLACDSUBR,
+              DEFINESUBR, GETSUBR, PUTPROPSUBR, REMPROPSUBR,
+              DIFFERENCESUBR, QUOTIENTSUBR, REMAINDERSUBR, DIVIDESUBR,
+              ADD1SUBR, SUB1SUBR, MINUSSUBR, EXPTSUBR,
+              ZEROPSUBR, ONEPSUBR, MINUSPSUBR, GREATERPSUBR, LESSPSUBR,
+              PRINTSUBR, READSUBR, NEWLINESUBR, SPACESSUBR,
+              EXITSUBR);
+
+    ErrMsg = (StorageExhausted, CyclicList,
+              IllegalChar, FileEnd, IntSyntax, IntRange, SExprSyntax,
+              UnboundVar, UndefFun, IllegalFun, UndefCond,
+              UnknownFun, UnknownForm, TooManyArgs, TooFewArgs,
+              ListExpected, AtomUnexpected, NatExpected, IntExpected,
+              PListExpected, IndExpected, CodeExpected,
+              IntOverflow, IntUnderflow, IntZeroDiv,
+              Raise0To0, Raise0ToNegPower);
+
+  VAR
+    Abort : BOOLEAN;         (* Anzeige eines Fehlers  *)
+
+
+  PROCEDURE Error (Pos : ErrPos; Msg : ErrMsg);
+
+  (*  Mit 'Error (Pos, Msg)' wird ein Fehler mit dem Fehlerort 'Pos' und der
+   *  durch 'Msg' beschriebenen Fehlerursache gemeldet.
+   *  Die Anzeige des Fehlers in 'Abort' führt zum Abbruch der Interpretation
+   *  der aktuellen Funktionsanwendung.
+   *)
+
+
+  PROCEDURE FatalError (Pos : ErrPos; Msg : ErrMsg);
+
+  (*  Mit 'FatalError (Pos, Msg)' wird ein schwerer Fehler mit dem Fehlerort
+   *  'Pos' und der durch 'Msg' beschriebenen Fehlerursache gemeldet.
+   *  Die Ausführung des Interpreters wird abgebrochen.
+   *)
+
+
+END Errors.
