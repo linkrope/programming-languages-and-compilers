@@ -1,5 +1,5 @@
-Asm.Load @
-Asm.Exec 0
+! Asm.Load @
+! Asm.Exec 0
 
 x = 1111 * 1111
 

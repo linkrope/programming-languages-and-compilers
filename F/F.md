@@ -12,7 +12,7 @@ und die Semantik sowie die Kontextbedingungen werden informell beschrieben.
 ## 1. Symbole und Kommentare
 
 Auf der lexikalischen Ebene besteht ein Programm aus Symbolen (Token),
-Kommentaren sowie Zwischenräumen (Leerzeichen, Zeilenenden, Tabulatoren, ...).
+Kommentaren sowie Zwischenräumen (Leerzeichen, Zeilenenden, Tabulatoren, …).
 Innerhalb von Symbolen dürfen keine Zwischenräume vorkommen.
 Zwischenräume werden nicht beachtet, es sei denn zum Trennen aufeinanderfolgender Symbole.
 Kommentare werden durch das Zeichen `!` eingeleitet und erstrecken sich bis zum Zeilenende.
@@ -22,8 +22,8 @@ Sie beeinflussen die Bedeutung des Programms nicht.
 number = digit {digit}.
 ident = letter {letter | digit}.
 
-digit = "0" | ... | "9".
-letter = "a" | ... | "z" | "A" | ... | "Z".
+digit = "0" | … | "9".
+letter = "a" | … | "z" | "A" | … | "Z".
 ```
 
 Die (vorzeichenlosen) ganzen Zahlen der Form number dürfen Werte zwischen 0 und 2<sup>31</sup> - 1 annehmen.
@@ -183,12 +183,12 @@ ActualParams = ["(" Expression {"," Expression} ")"].
 
 Der Typ `BOOL` bezeichnet die Wahrheitswerte, der Typ `INT` die ganzen Zahlen.
 
-Aktuelle Parameter der Form <code>Expression<sub>1</sub>, ..., Expression<sub>n</sub></code> (n ≥ 0)
+Aktuelle Parameter der Form <code>Expression<sub>1</sub>, …, Expression<sub>n</sub></code> (n ≥ 0)
 sind kompatibel zur Signatur der Form
-<code>ident : SimpleType<sub>1</sub> * ... * SimpleType<sub>m</sub> -> SimpleType</code> (m ≥ 0),
+<code>ident : SimpleType<sub>1</sub> * … * SimpleType<sub>m</sub> -> SimpleType</code> (m ≥ 0),
 wenn m = n gilt und jeder Ausdruck <code>Expression<sub>k</sub></code>
 vom Typ <code>SimpleType<sub>k</sub></code>> ist (1 ≤ k ≤ m).
-Für formale Parameter der Form <code>ident<sub>1</sub>, ..., ident<sub>m</sub></code>
+Für formale Parameter der Form <code>ident<sub>1</sub>, …, ident<sub>m</sub></code>
 ist dann <code>ident<sub>k</sub></code> vom Typ <code>SimpleType<sub>k</sub></code> (1 ≤ k ≤ m).
 Die Namen der formalen Parameter müssen verschieden sein.
 

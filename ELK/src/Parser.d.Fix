@@ -1,0 +1,122 @@
+module Parser;
+import runtime;
+import Files;
+import Texts;
+import Viewers;
+import Oberon;
+import TextFrames;
+import Scanner;
+%
+Texts.Writer W;
+int Tok;
+uint[128][DIV(200 - 1, 31 + 1) + 1] Dir;
+%
+void Load(char[] Name)
+{
+    Files.File f;
+    Files.Rider r;
+    int i;
+    int j;
+    int m;
+    int n;
+    f = Files.Old(Name);
+    if (f != null)
+    {
+        Files.Set(r, f, 0);
+        Files.ReadBytes(r, m, SIZE(INTEGER));
+        Files.ReadBytes(r, n, SIZE(INTEGER));
+        for (i = 0; i <= m - 1; ++i)
+        {
+            Files.ReadBytes(r, Dir[i], n * SIZE(SET));
+            for (j = n; j <= Dir[i].length - 1; ++j)
+            {
+                Dir[i][j] = Set;
+            }
+        }
+    }
+    else
+    {
+        Texts.WriteString(W, "Load error: ");
+        Texts.WriteString(W, Name);
+        Texts.WriteString(W, " not found");
+        Texts.WriteLn(W);
+        Texts.Append(Oberon.Log, W.buf);
+        HALT(99);
+    }
+}
+%
+void Parse()
+{
+    Texts.Scanner S;
+    Texts.Text T;
+    Viewers.Viewer V;
+    long Beg;
+    long End;
+    long Time;
+    void Process(Texts.Text Source, long Pos)
+    {
+        Scanner.Init(Source, Pos);
+        Texts.Write(W, '\x09');
+        Texts.WriteString(W, "parsing ");
+        Texts.Append(Oberon.Log, W.buf);
+        Scanner.Get(Tok); $;
+        Texts.WriteLn(W);
+        Texts.Append(Oberon.Log, W.buf);
+    }
+
+    Texts.OpenScanner(S, Oberon.Par.text, Oberon.Par.pos);
+    Texts.Scan(S);
+    if (S.class == Texts.Char)
+    {
+        if (S.c == "*")
+        {
+            V = Oberon.MarkedViewer();
+            if (V.dsc != null && V.dsc.next is TextFrames.Frame)
+            {
+                Process(V.dsc.next(TextFrames.Frame).text, 0);
+            }
+        }
+        else if (S.c == "@")
+        {
+            Oberon.GetSelection(T, Beg, End, Time);
+            if (Time >= 0)
+            {
+                Process(T, Beg);
+            }
+        }
+        else if (S.c == "^")
+        {
+            Oberon.GetSelection(T, Beg, End, Time);
+            if (Time >= 0)
+            {
+                Texts.OpenScanner(S, T, Beg);
+                Texts.Scan(S);
+            }
+        }
+    }
+    if (S.class == Texts.Name)
+    {
+        NEW(T);
+        Texts.Open(T, S.s);
+        if (T.len != 0)
+        {
+            Process(T, 0);
+        }
+        else
+        {
+            Texts.WriteString(W, S.s);
+            Texts.WriteString(W, " not found");
+            Texts.WriteLn(W);
+            Texts.Append(Oberon.Log, W.buf);
+        }
+    }
+}
+%
+static this()
+{
+    Texts.OpenWriter(W);
+    Load("Parser.Tab");
+    Texts.WriteString(W, "Parser / ELK");
+    Texts.WriteLn(W);
+    Texts.Append(Oberon.Log, W.buf);
+}

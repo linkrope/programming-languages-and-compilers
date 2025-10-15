@@ -1,0 +1,9 @@
+{
+    "name": "risc",
+    "description": "RISC Assembler and Virtual Machine (ported from Oberon)",
+    "authors": ["MK 06.96"],
+    "license": "proprietary",
+    "targetType": "executable",
+    "sourcePaths": ["src"],
+    "importPaths": ["src"]
+}

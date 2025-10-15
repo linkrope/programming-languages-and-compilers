@@ -1,5 +1,5 @@
-Asm.Load @
-Asm.Exec 0  47 11
+! Asm.Load @
+! Asm.Exec 0  47 11
 
 FP = 29
 SP = 30
